@@ -1,0 +1,250 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Implementation Notes &#8212; OraRdkitCart 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Open Source Software" href="licenses.html" />
+    <link rel="prev" title="User Manual" href="manual.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="licenses.html" title="Open Source Software"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manual.html" title="User Manual"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="manual.html"
+                        title="previous chapter">User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="licenses.html"
+                        title="next chapter">Open Source Software</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="implementation-notes">
+<span id="implementation"></span><h1>Implementation Notes<a class="headerlink" href="#implementation-notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reactions">
+<h2>Reactions<a class="headerlink" href="#reactions" title="Permalink to this headline">¶</a></h2>
+<p>The cartridge does not support reactions comprehensively.  However, reaction smiles in indexed columns
+will be converted into a mixture of reactants and products.</p>
+</div>
+<div class="section" id="row-level-functions">
+<h2>Row level functions<a class="headerlink" href="#row-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>The Oracle cartridge interface allows for domain index operators to do full index searches or
+row level searches. The cartridge must implement both. In this cartridge, both
+implementations do a full table search using the RMI server (even for the row level search a
+few hundred RMI call-outs are going to take longer than a complete search).
+When doing row level matches all matching rows are stored in a VARRAY which is searched
+to see if the current row matches the query. Since the row level search is constantly looping
+through the hit array it will always be more inefficient than the full index search (which returns
+matching rows in bulk). It is not possible to use Oracle hashes/associative arrays for swift
+retrieval as these are PL/SQL structures and cannot be stored in the index type (Oracle
+objects can only have SQL members).</p>
+<p>It appears that the optimizer always chooses a full index scan (though this could change in
+the future). Dbms_output messages indicate which implementation is used when a domain
+operator is used.</p>
+</div>
+<div class="section" id="transactions">
+<span id="id1"></span><h2>Transactions<a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h2>
+<p>Be wary of performing domain searching while editing the underlying table. Since the domain
+index searches as another user in a separate connection it cannot be aware of uncommitted
+edits. If you edit a row then do a domain index search prior to committing that row will be
+searched using the wrong structure. If you delete a row, then do a search prior to committing,
+and that row is returned as a hit you will get an Oracle internal error.</p>
+<p>One possible fix is to only allow one session to edit a table at once (use “select for update .. “
+to enforce). The index editing functions save this editing session id somewhere. All search
+functions pass the editing transaction id to the RMI server. The RMI server can do a dirty
+read of the change table if the current transaction is the editing transaction (SET
+TRANSACTION ISOLATION LEVEL SERIALIZABLE or ALTER SESSION SET
+ISOLATION_LEVEL SERIALIZABLE), or a normal read (SET TRANSACTION ISOLATION
+LEVEL READ COMMITTED or ALTER SESSION SET ISOLATION_LEVEL READ
+COMMITTED) otherwise. As another alternative to support transactions, the tables which
+contain domain indexes could have triggers which call autonomous transactions (pragma
+autonomous_transaction) which track transaction changes to the index.  Neither solutions
+has been implemented yet.</p>
+</div>
+<div class="section" id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>Logging is enabled on the RMI server using Apache log4j. The logger is configured in
+bin/log4j.properties. The default configuration from the GUI installer creates both a
+console appender and
+a rolling file log in log/rmi/rmi_server.log.
+The console appender is easily removed by This is easily changed by editing the log4j
+configuration file.</p>
+<p>There is another available appender which logs messages of level INFO or
+higher to the Oracle table MESSAGE_TABLE (though connection errors obviously can’t be
+logged). It is disabled
+by default and can be enabled by editing the setting database.use_database_appender in the
+configuration file.</p>
+<p>The Oracle java wrappers log to the console using log4j.  Messages may be found in the
+Oracle trace file.  Alternatively the SQL command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CALL</span> <span class="n">dbms_java</span><span class="o">.</span><span class="n">set_output</span><span class="p">(</span><span class="mi">200000</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>will direct Java output to SQL*Plus.</p>
+<p>The PL/SQL functions and procedures print out various messages. To see them use:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">serveroutput</span> <span class="n">on</span> <span class="n">size</span> <span class="mi">1000000</span>
+</pre></div>
+</div>
+<p>Note that Java and PL/SQL messages are buffered within SQL*Plus and are not available
+until an SQL command has completed.</p>
+</div>
+<div class="section" id="rmi-networking">
+<h2>RMI Networking<a class="headerlink" href="#rmi-networking" title="Permalink to this headline">¶</a></h2>
+<p>The Oracle JVM contains the default rmi server hostname in the table c$cschem1.rmi_hostname.  It
+may be changed via an SQL command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">update</span> <span class="n">rmi_hostname</span> <span class="nb">set</span> <span class="n">rmi_hostname</span> <span class="o">=</span> <span class="s1">&#39;rmi_server.company.com&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The rmi server contains settings for both the rmi server hostname (property <em>java.rmi.server.hostname</em>)
+and the Oracle database host (property <em>credentials.host</em>).</p>
+<p>In the case where the rmi server host or the Oracle host have multiple network interfaces the choice of
+correct network names is particularly important.</p>
+</div>
+<div class="section" id="pl-sql-data-structures">
+<h2>PL/SQL Data Structures<a class="headerlink" href="#pl-sql-data-structures" title="Permalink to this headline">¶</a></h2>
+<p>This section summarizes the main PL/SQL packages and types used by the cartridge:</p>
+<ul class="simple">
+<li>CHEM_STRUCTURE this package provides utility functions and communicates with
+the RMI server though java functions and procedures.</li>
+<li>STRUCTURE_IND_OBJ this type implements the oracle extensible index interface.
+Includes all domain index searches.</li>
+<li>INDEX_UTIL this package assists STRUCTURE_IND_OBJ. Includes row-level
+searches and functional searches.</li>
+</ul>
+</div>
+<div class="section" id="trouble-shooting">
+<h2>Trouble Shooting<a class="headerlink" href="#trouble-shooting" title="Permalink to this headline">¶</a></h2>
+<p>Besides the obvious scenario where the cartridge is not sufficiently resourced in terms of
+memory this section documents other cases where the cartridge may break or appear to
+break.</p>
+<div class="section" id="cartridge-is-not-responsive">
+<h3>Cartridge is not responsive<a class="headerlink" href="#cartridge-is-not-responsive" title="Permalink to this headline">¶</a></h3>
+<p>Check all outputs for errors as described in Section 6.5 (page 23). In the default configuration
+log4j messages will go to log/rmi/rmi_server.log. In a
+Linux install standard error and output will end up in nohup.out in the bin directory. Note that
+many cartridge functions are time consuming, though the first 100 rows matching any domain operator
+will return immediately.
+If there are no obvious error causes it may be worth restarting the cartridge.</p>
+</div>
+<div class="section" id="oracle-internal-errors">
+<h3>Oracle internal errors<a class="headerlink" href="#oracle-internal-errors" title="Permalink to this headline">¶</a></h3>
+<p>If an index operation returns an internal error this may be due to an invalid row id. A commit
+in the current session with
+normally correct the error, see <a class="reference internal" href="#transactions">transactions</a> above.
+Otherwise, before contacting Oracle rebuild the index and verify
+that the index is working correctly.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>select id
+from nci_open
+where c$cschem1.exactMatch(smiles, &#39;Cl&#39;, -1) = 1;
+2
+3 select id
+*
+ERROR at line 1:
+ORA-00600: internal error code, arguments: [12406], [], [], [], [],
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="reinstalling-and-uninstalling-the-cartridge">
+<h2>Reinstalling and Uninstalling the Cartridge<a class="headerlink" href="#reinstalling-and-uninstalling-the-cartridge" title="Permalink to this headline">¶</a></h2>
+<p>You do not need to uninstall an existing cartridge prior to installing a new version of the
+cartridge. Simply stop the RMI server and install any new version on top of the existing
+cartridge. After a new install any structure indexes will need to be dropped and recreated.</p>
+<p>To uninstall the cartridge first stop the RMI server. Next, connect to Oracle as sys and drop the
+cartridge user and tester:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>SQL&gt; drop user C$CSCHEM1 cascade;
+User dropped.
+SQL&gt; drop user CSCHEM1_TEST cascade;
+User dropped.
+</pre></div>
+</div>
+<p>Any structure indexes created by other users will still be present, though obviously it will no
+longer be possible to perform chemical operations on them. While harmless, they can easily
+be removed using the drop index command.
+Finally, the cartridge distribution can be deleted.</p>
+<ul class="simple">
+<li><a class="reference internal" href="index.html#home"><span class="std std-ref">Home</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="licenses.html" title="Open Source Software"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manual.html" title="User Manual"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Gareth Jones.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

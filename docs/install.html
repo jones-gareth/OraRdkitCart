@@ -1,0 +1,257 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installation &#8212; OraRdkitCart 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing" href="test.html" />
+    <link rel="prev" title="Building the code" href="build.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="test.html" title="Testing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="build.html" title="Building the code"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="build.html"
+                        title="previous chapter">Building the code</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="test.html"
+                        title="next chapter">Testing</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<span id="install"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>In accordance with Oracle naming conventions the cartridge is installed to the user
+C$CSCHEM1 (Cartridge-Cairn Scientific-Chemistry). This user is granted select on any table so that
+smiles columns in any table can be viewed. C$CSCHEM1 is also allowed to use Java to
+connect to any port. The
+change log tables and Java indexes are stored in this schema. The table JAVA_OBJECTS
+contains serialized Java objects; INDEX_LOOKUP maps index names to change log tables;
+STRUCTURE_SEARCH_LOG maintains search statistics and MESSAGE_TABLE logs RMI
+server log messages rated INFO or higher.</p>
+<p>A number of PL/SQL data structures are also created. The most important of these include:
+CHEM_STRUCTURE, a package which contains a set of functions for manipulating structure
+types and Java wrappers; STRUCTURE_IND_OBJ, an object which implements the
+extensible index and INDEX_UTL, a package which provides common index functions.
+These steps are required to install the cartridge (assuming that Oracle is already installed).</p>
+<ol class="arabic simple">
+<li>Create the cartridge owner C$CSCHEM1 and tester CSCHEM1_TEST</li>
+<li>Install SQL and PL/SQL components into Oracle</li>
+<li>Install RMI JAVA client classes to Oracle</li>
+<li>Configure and start RMI service</li>
+<li>Grant permissions to cartridge users.</li>
+</ol>
+<div class="section" id="automated-install">
+<h2>Automated Install<a class="headerlink" href="#automated-install" title="Permalink to this headline">¶</a></h2>
+<p>A GUI is provided to facilitate the install process. The RMI server will be installed on the
+same machine that the installer is run.  The Oracle database does not need to be on this machine,
+but if Oracle is on another machine TCP port access should be properly configured
+(see <a class="reference internal" href="prerequisites.html#prerequisites"><span class="std std-ref">Prerequisites</span></a>)
+You will need the following information before running the installer:</p>
+<ol class="arabic simple">
+<li>Oracle SID. This is the unique per-machine identifier of an Oracle database and is used by
+JDBC drivers to connect to Oracle.</li>
+<li>Oracle SYS Password.</li>
+<li>Any existing users who you wish to grant cartridge access to.</li>
+<li>An idea of how much maximum memory you wish to assign to Java
+and whether or not to cache Openeye molecules.</li>
+</ol>
+<p>The installer logs messages in the directory log/install/&lt;install date&gt;. Check this directory and
+the application console if the install fails.  Additionally, there are messages logged to the console
+and GUI.</p>
+<p>To run the installer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">bin</span><span class="o">/</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<div class="section" id="choose-install-type">
+<h3>Choose Install Type<a class="headerlink" href="#choose-install-type" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/install1.png"><img alt="_images/install1.png" src="_images/install1.png" style="width: 255.0px; height: 222.5px;" /></a>
+<p>Select “Install both Oracle components and RMI server”.  The data cartridge also permits multiple RMI servers
+so that different indices can be hosted on different servers.  These scenarios are not covered in this
+documentation.</p>
+</div>
+<div class="section" id="specify-jdbc-connection-options">
+<h3>Specify JDBC Connection Options<a class="headerlink" href="#specify-jdbc-connection-options" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/install2.png"><img alt="_images/install2.png" src="_images/install2.png" style="width: 347.0px; height: 271.5px;" /></a>
+<p>On the next screen enter JDBC database name, hostname and port number together with the SYS password.</p>
+<p>Selecting “Next Step” will test the connection and advance to the next screen.</p>
+</div>
+<div class="section" id="install-cartridge">
+<h3>Install Cartridge<a class="headerlink" href="#install-cartridge" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/install3.png"><img alt="_images/install3.png" src="_images/install3.png" style="width: 347.0px; height: 271.5px;" /></a>
+<p>On the next screen you can select the tablespaces that the Cartridge user and tester will use.
+Note that the installer does not create new tablespaces: if you want to create custom
+tablespaces for these users you will need to do that prior to running the installer. You will
+need to specify a shared password for both users. If there is already a cartridge present it will
+have to be removed before you can proceed. If your are installing on the host running Oracle localhost can
+be used as the
+RMI hostname, otherwise you should use a network name that the Oracle instance will use to
+connect to the RMI server.
+2ddThere are some cases where if you have more than
+one network card you may have to specify a particular hostname.</p>
+</div>
+<div class="section" id="grant-permissions">
+<h3>Grant Permissions<a class="headerlink" href="#grant-permissions" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/install4.png"><img alt="_images/install4.png" src="_images/install4.png" style="width: 400.0px; height: 349.5px;" /></a>
+<p>On the next screen select which (if any) existing users will be allowed to use the data
+cartridge. Once the cartridge is installed you can use the SQL script <em>sql/grant.sql</em>
+to grant permissions to users post-installation as described <a class="reference internal" href="#grants"><span class="std std-ref">later</span></a>. The test user
+CSCHEM1_TEST us automatically granted permission to use the cartridge. Note that
+Oracle comes with a large number of built-in users.</p>
+</div>
+<div class="section" id="configure-rmi-server">
+<h3>Configure RMI Server<a class="headerlink" href="#configure-rmi-server" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/install5.png"><img alt="_images/install5.png" src="_images/install5.png" style="width: 400.0px; height: 349.5px;" /></a>
+<p>For the penultimate step select the number of RMI threads, the maximum memory usage for the Java RMI process,
+whether to enable the cache of RDKit molecules and configure the substructure search and index build
+thread pools. It is safe to use accept the defaults on this screen.
+Once this screen is completed the RMI
+server will be started and the connection between the test user and data cartridge validated.
+The server configuration is stored in the file server.properties in the bin subdirectory.
+Messages from the cartridge are logged in the file log/rmi/rmi_server.log (relative to the
+cartridge root).</p>
+<p>A shell script
+,*runServer.sh* in the bin subdirectory, is provided to manually start the RMI cartridge.
+A companion script <em>bin/stopServer</em> will terminate a running server.
+Once you have installed the cartridge you might want to change the configuration settings by
+editing server.properties as described in <a class="reference internal" href="#config"><span class="std std-ref">below</span></a>. In the configuration file you
+can arrange for indexes and the cache to be pre-loaded on startup. Whenever the
+configuration file is edited the Java RMI process must be restarted.</p>
+</div>
+<div class="section" id="load-test-data-and-build-index">
+<span id="load-test"></span><h3>Load Test Data and Build Index<a class="headerlink" href="#load-test-data-and-build-index" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/install6.png"><img alt="_images/install6.png" src="_images/install6.png" style="width: 275.0px; height: 179.5px;" /></a>
+<p>In this final, optional, step you can load the test data into the cartridge tester’s
+(CSCHEM1_TEST) schema. This loads 260000 structure from the NCI open database into
+a table called nci_open. Following this you have the option to build a structure domain index
+on the table. Once you’ve done this you can run the commands in the manual using
+SQL*Plus when you’re connected as CSCHEM1_TEST. Once this step is complete, a final
+screen shows a summary of the install.</p>
+<a class="reference internal image-reference" href="_images/install7.png"><img alt="_images/install7.png" src="_images/install7.png" style="width: 312.0px; height: 222.5px;" /></a>
+</div>
+</div>
+<div class="section" id="post-installation">
+<h2>Post Installation<a class="headerlink" href="#post-installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="configuration-file">
+<span id="config"></span><h3>Configuration File<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>Runtime settings are stored in <em>bin/server.properties</em>. The file is commented and enables configuration
+of the molecule cache and the various thread pools.  The rmi server will need to be restarted for edits to
+take effect.</p>
+</div>
+<div class="section" id="grants">
+<span id="id1"></span><h3>Grant Permissions<a class="headerlink" href="#grants" title="Permalink to this headline">¶</a></h3>
+<p>In order for users to create domain indexes and use cartridge features they need to be
+granted permission to execute an number of C$CSCHEM1 objects. Use the script
+<em>sql/grant.sql</em> to give permissions to cartridge users. You will need SQL*Plus to run the
+script.  Note this script does not create new
+users, it grants permissions to existing users:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>% cd sql
+% sqlplus /nolog @grant.sql
+
+SQL*Plus: Release 18.0.0.0.0 - Production on Sat Jun 1 17:23:11 2019
+Version 18.3.0.0.0
+
+Copyright (c) 1982, 2018, Oracle.  All rights reserved.
+
+SP2-0640: Not connected
+Instance                      gjdev.cairn
+C$CSCHEM1 password
+User name                     query
+Connected.
+
+Call completed.
+
+old   1: grant execute on chem_structure to &amp;varUser
+new   1: grant execute on chem_structure to query
+
+Grant succeeded.
+</pre></div>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="index.html#home"><span class="std std-ref">Home</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="test.html" title="Testing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="build.html" title="Building the code"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Gareth Jones.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

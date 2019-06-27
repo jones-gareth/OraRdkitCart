@@ -1,0 +1,142 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Background &#8212; OraRdkitCart 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Prerequisites" href="prerequisites.html" />
+    <link rel="prev" title="OraRdkitCart: Rdkit chemical structure data cartridge for Oracle" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="prerequisites.html" title="Prerequisites"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="OraRdkitCart: Rdkit chemical structure data cartridge for Oracle"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">OraRdkitCart: Rdkit chemical structure data cartridge for Oracle</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="prerequisites.html"
+                        title="next chapter">Prerequisites</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="background">
+<span id="id1"></span><h1>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h1>
+<p>The cartridge provides domain indexes for tables that contain structures encoded in Daylight
+smiles (or reactions encoded as smirks). This is achieved by using an external java RMI
+service to perform substructure, similarity and exact match chemical searches. The RMI
+service uses the RDKit toolkit to assist in smiles parsing and chemical structure handling.
+The Oracle JVM is used to call out to the RMI service.</p>
+<p>A domain index can be created be created for any user owner in a table table on a varchar2
+column column containing structural smiles. This index can be uniquely named such that
+index_name = owner.table.column. On index building the RMI server connects to oracle and
+extracts smiles by Oracle ROWID. The external index is built as a hash keyed by ROWID
+and with a data structure value which contains a fingerprint for the structure and the
+canonical smiles. The index is then saved to a local cache file.</p>
+<p>The index tracks edits to the base table using a change log (or journal table) that contains
+ROWIDs and new values. Before performing any searches the domain index loads any new
+entries from the change log into the index. An index rebuild saves these changes and
+empties the log table.
+Substructure search is achieved by fingerprinting a query SMARTs pattern (or MDL Mol
+block) and screening out against fingerprints in the index. Those structures which
+test against the fingerprint are searched exhaustively for a match. Similarity search is done
+by fingerprinting a smiles query and determining Tanimoto coefficients for target structures.
+The compounds that exceed a minimum similarity are returned. Exact match search is done
+by canonicalizing the query smiles and doing string comparisons to determine matching
+compounds.</p>
+<p>The substructure search requires the creation of RDKit ROMols. These can be cached on
+the RMI server in a LRU (least-recently used) cache. They are not currently cached in Oracle
+and must be regenerated each time the RMI server starts. If enabled, the molecule cache can
+simply retain OEMols that it generates for search or all molecules in an index can be added to
+the cache. If you have sufficient memory to cache all the structures in your database and
+plan to keep the RMI server running a long time a cache will improve performance.</p>
+<p>RDKit pattern fingerprints are used in the data cartridge
+for both screenout during substructure searches and in the calculation of
+molecular similarity for similarity searches.</p>
+<p>In order to improve performance during index build and substructure search thread pools can be assigned
+to parallelize those operations.</p>
+<ul class="simple">
+<li><a class="reference internal" href="index.html#home"><span class="std std-ref">Home</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="prerequisites.html" title="Prerequisites"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="OraRdkitCart: Rdkit chemical structure data cartridge for Oracle"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Gareth Jones.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

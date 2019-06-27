@@ -1,0 +1,225 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Prerequisites &#8212; OraRdkitCart 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building the code" href="build.html" />
+    <link rel="prev" title="Background" href="background.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="build.html" title="Building the code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="background.html" title="Background"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="background.html"
+                        title="previous chapter">Background</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="build.html"
+                        title="next chapter">Building the code</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="prerequisites">
+<span id="id1"></span><h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Oracle 12C or 18C</li>
+<li>Java 11 JDK</li>
+<li>RRDKit Java library</li>
+<li>Maven 3.3.9 or later</li>
+<li>Correct network configuration</li>
+</ul>
+</div>
+<div class="section" id="oracle-12c-or-18c">
+<h2>Oracle 12C or 18C<a class="headerlink" href="#oracle-12c-or-18c" title="Permalink to this headline">¶</a></h2>
+<p>The cartridge has been tested on Oracle 12C and Oracle 18C. It would be expected to run on Oracle 19C,
+but has not yet been tested.</p>
+</div>
+<div class="section" id="java-11-jdk">
+<h2>Java 11 JDK<a class="headerlink" href="#java-11-jdk" title="Permalink to this headline">¶</a></h2>
+<p>The cartridge has been developed on OpenJDK 11.  It uses Java 11 syntax features and is not
+compatible with earlier versions of Java.</p>
+</div>
+<div class="section" id="rdkit-java-library">
+<h2>RDKit Java library<a class="headerlink" href="#rdkit-java-library" title="Permalink to this headline">¶</a></h2>
+<p>The cartridge loads the RDKit java JNI shared library and associated jar file.
+The Java wrappers should be created by following the
+<a class="reference external" href="https://www.rdkit.org/docs/Install.html">RDKit installation</a> instructions.  Once the java wrappers have
+been built the shared library <em>libGraphMolWrap.so</em> should be placed on <em>java.library.path</em> or in the lib
+directory (of this project).  The cartridge will first try to load the wrapper library from the
+path or, failing that, the project lib directory.</p>
+<p>For convenience the project includes a pre-built wrapper library for Ubuntu 18.04 in the lib directory.
+This library will not likely work on other Linux configurations (for example Centos/RHEL 7).</p>
+<p>The pre-built library has the following direct dependencies that should be installed from OS repositories:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="100%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>libboost_serialization.so.1.65.1</td>
+</tr>
+<tr class="row-even"><td>libpthread.so.0</td>
+</tr>
+<tr class="row-odd"><td>libboost_iostreams.so.1.65.1</td>
+</tr>
+<tr class="row-even"><td>libstdc++.so.6</td>
+</tr>
+<tr class="row-odd"><td>libm.so.6</td>
+</tr>
+<tr class="row-even"><td>libgcc_s.so.1</td>
+</tr>
+<tr class="row-odd"><td>libc.so.6</td>
+</tr>
+<tr class="row-even"><td>ld-linux-x86-64.so.2</td>
+</tr>
+</tbody>
+</table>
+<p>In addition the libz and bzip2 development libraries are required.</p>
+<p>The project includes a local maven repository for the installation of libraries that are not available online.
+The RDKit jar file should be installed in the project repository.
+This project includes a pre-built jar file (<em>repo/org/rdkit/rdkit/1.0-SNAPSHOT/rdkit-1.0-SNAPSHOT.jar</em>)
+which should be replaced if you have built your own wrapper.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>rm -r ~/.m2/repository/org/rdkit
+cp $RDBASE/build/Code/JavaWrappers/gmwrapper/libGraphMolWrap.so lib
+cp $RDBASE/Code/JavaWrappers/gmwrapper/org.RDKit.jar repo/org/rdkit/rdkit/1.0-SNAPSHOT/rdkit-1.0-SNAPSHOT.jar
+</pre></div>
+</div>
+</div>
+<div class="section" id="oracle-jdbc-driver">
+<h2>Oracle JDBC driver<a class="headerlink" href="#oracle-jdbc-driver" title="Permalink to this headline">¶</a></h2>
+<p>The JDBC driver for Oracle is free to download but is proprietary and cannot be distributed with
+the project.</p>
+<p>Download the Oracle 18C JDBC drivers (ojdbc8.jar file only) from
+<a class="reference external" href="https://www.oracle.com/technetwork/database/application-development/jdbc/downloads/jdbc-ucp-183-5013470.html">here</a>
+and save in the local repository (note the change in file name).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">repo</span><span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">ojdbc</span><span class="o">/</span><span class="mi">8</span><span class="o">/</span>
+<span class="n">cp</span> <span class="n">ojdbc8</span><span class="o">.</span><span class="n">jar</span> <span class="n">repo</span><span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">oracle</span><span class="o">/</span><span class="n">ojdbc</span><span class="o">/</span><span class="mi">8</span><span class="o">/</span><span class="n">ojdbc</span><span class="o">-</span><span class="mf">8.</span><span class="n">jar</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="maven-3-3-9-or-later">
+<h2>Maven 3.3.9 or later<a class="headerlink" href="#maven-3-3-9-or-later" title="Permalink to this headline">¶</a></h2>
+<p>The Java build reqires Maven 3.3.9 of later.  For ubuntu the  version in the OS repositories is fine, but
+for RHEL/Centos 7 a newer version will need to be <a class="reference external" href="https://maven.apache.org/download.cgi">downloaded</a>.</p>
+</div>
+<div class="section" id="correct-network-configuration">
+<h2>Correct network configuration<a class="headerlink" href="#correct-network-configuration" title="Permalink to this headline">¶</a></h2>
+<p>For the case where the cartridge is installed on one machine and Oracle resides on another the
+following ports should be open between the two hosts.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="8%" />
+<col width="60%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Oracle</td>
+<td>1521</td>
+<td>May be changed in Oracle</td>
+</tr>
+<tr class="row-even"><td>RMI server</td>
+<td>1099</td>
+<td>Fixed port.</td>
+</tr>
+<tr class="row-odd"><td>Jar install webserver</td>
+<td>9100</td>
+<td>Fixed port. Can be closed after install</td>
+</tr>
+</tbody>
+</table>
+<p>The 1098 port is used to create a webserver on the install machine that servers JAR files to the Oracle host.
+These are loaded into the OJVM and the port may be closed after install.</p>
+</div>
+<div class="section" id="rdbase-environment-variable">
+<h2>RDBASE Environment Variable<a class="headerlink" href="#rdbase-environment-variable" title="Permalink to this headline">¶</a></h2>
+<p>The wrapper shared library will not load unless the environment variable RDBASE is set.  This should be set to
+the directory containing the full RDKit distribution.  It would appear that cartridge functions only require that the
+variable be set, not that it actually points to an RDKit distribution as the tests pass with <em>RDBASE=/tmp</em>.</p>
+<ul class="simple">
+<li><a class="reference internal" href="index.html#home"><span class="std std-ref">Home</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="build.html" title="Building the code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="background.html" title="Background"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Gareth Jones.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

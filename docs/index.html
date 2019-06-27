@@ -1,0 +1,191 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>OraRdkitCart: Rdkit chemical structure data cartridge for Oracle &#8212; OraRdkitCart 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Background" href="background.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="background.html" title="Background"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Next topic</h4>
+  <p class="topless"><a href="background.html"
+                        title="next chapter">Background</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="orardkitcart-rdkit-chemical-structure-data-cartridge-for-oracle">
+<span id="home"></span><h1>OraRdkitCart: Rdkit chemical structure data cartridge for Oracle<a class="headerlink" href="#orardkitcart-rdkit-chemical-structure-data-cartridge-for-oracle" title="Permalink to this headline">¶</a></h1>
+<p>OraRdkitCart is an Oracle data cartridge/extensible index to allow
+substructure and similarity searching using SQL queries on tables
+which contain indexed chemical structures.</p>
+<p>It uses a Java RMI server and <a class="reference external" href="https://www.rdkit.org">RDKit</a> wrappers for chemical structure
+handling.</p>
+<p>This software was developed with funding from <a class="reference external" href="https://www.beacondiscovery.com">Beacon Discovery</a> and
+<a class="reference external" href="https://www.glysade.com">Glysade LLC</a>.</p>
+<div class="section" id="quick-start">
+<h2>Quick-start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Satisfy <a class="reference internal" href="prerequisites.html#prerequisites"><span class="std std-ref">Prerequisites</span></a></li>
+<li><a class="reference internal" href="build.html#build"><span class="std std-ref">Build</span></a> Java code</li>
+<li><a class="reference internal" href="install.html#install"><span class="std std-ref">Install</span></a> cartridge</li>
+<li><a class="reference internal" href="test.html#test"><span class="std std-ref">Test</span></a> installation</li>
+<li>Run example SQL from the <a class="reference internal" href="manual.html#manual"><span class="std std-ref">User Manual</span></a></li>
+</ol>
+<p>All shell commands in the documentation should be run from project root.</p>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#oracle-12c-or-18c">Oracle 12C or 18C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#java-11-jdk">Java 11 JDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#rdkit-java-library">RDKit Java library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#oracle-jdbc-driver">Oracle JDBC driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#maven-3-3-9-or-later">Maven 3.3.9 or later</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#correct-network-configuration">Correct network configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prerequisites.html#rdbase-environment-variable">RDBASE Environment Variable</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Building the code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#automated-install">Automated Install</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="install.html#choose-install-type">Choose Install Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="install.html#specify-jdbc-connection-options">Specify JDBC Connection Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="install.html#install-cartridge">Install Cartridge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="install.html#grant-permissions">Grant Permissions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="install.html#configure-rmi-server">Configure RMI Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="install.html#load-test-data-and-build-index">Load Test Data and Build Index</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#post-installation">Post Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="install.html#configuration-file">Configuration File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="install.html#grants">Grant Permissions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">User Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual.html#creating-and-manipulating-domain-indexes">Creating and Manipulating Domain Indexes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual.html#using-domain-index-operators">Using Domain Index Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual.html#when-not-to-use-the-domain-index-operators">When not to use the Domain Index Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual.html#functional-operators">Functional Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual.html#chem-structure-functions-and-procedures">CHEM_STRUCTURE Functions and Procedures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual.html#utility-functions">Utility functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual.html#index-procedures">Index Procedures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="manual.html#de-morgan-extended-fingerprints">De Morgan/Extended Fingerprints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual.html#clob-structure-columns">CLOB structure columns</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#reactions">Reactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#row-level-functions">Row level functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#transactions">Transactions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#rmi-networking">RMI Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#pl-sql-data-structures">PL/SQL Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#trouble-shooting">Trouble Shooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="implementation.html#cartridge-is-not-responsive">Cartridge is not responsive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="implementation.html#oracle-internal-errors">Oracle internal errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#reinstalling-and-uninstalling-the-cartridge">Reinstalling and Uninstalling the Cartridge</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="licenses.html">Open Source Software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="licenses.html#cartridge-license">Cartridge License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="licenses.html#maven-libraries">Maven Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="licenses.html#rdkit-binary">RDKit Binary</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="background.html" title="Background"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">OraRdkitCart 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Gareth Jones.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>
