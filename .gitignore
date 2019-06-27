@@ -1,0 +1,13 @@
+.idea/
+*.iml
+*.swp
+target/
+sqlnet.log
+nohup.out
+log/
+sql/objects/
+cache/
+scratch/
+repo/com/oracle/ojdbc/8/
+doc/_build
+old_doc/

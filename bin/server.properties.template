@@ -1,0 +1,62 @@
+
+# Install directory: use / as the path seperator even for windows paths
+cartridge.install_directory = <install_directory>
+
+# Make sure you publish the IP adress that the server needs to use
+# (the one the client needs to communicate back to the server.
+# If commented out then uses InetAddress.getLocalHost().getHostName() 
+# to get hostname
+
+java.rmi.server.hostname = <rmi_hostname>
+
+# Set to the size of the thread pools used to service tasks and batch
+# jobs.  Note that because of other concurrency constraints the
+# cartridge may not be able to service this number of tasks
+# simultaneously.
+
+task_manager.n_threads = <n_threads>
+
+# Use the molecule cache for substructure search
+
+structure_search.use_molecule_cache = <use_cache>
+
+# The molecule cache size - make sure you have enough memory
+
+molecule_cache.cache_size = <cache_size>
+#molecule_cache.cache_size = 75000
+
+# Optionally, you can create a dedicated thread pool for substructure
+# searching.  The pool will be shared between all currently running
+# substructure searches.  The pool will speed up substructure searches
+# (assuming that the CPUs are available), but it may impact the
+# performance of other searches that are running concurrently.
+
+structure_search.use_substructure_search_thread_pool = <use_substructure_search_thread_pool>
+substructure_search_thread_pool.n_threads = <n_substructure_search_threads>
+
+# You can do a similar thing for building 2D indexes:
+
+table_index.use_index_build_thread_pool = <use_index_build_thread_pool>
+index_build_thread_pool.n_threads = <n_index_build_threads>
+
+# credentials for Oracle
+
+credentials.password = <password>
+credentials.test_password = <test_password>
+credentials.database = <database>
+credentials.host = <database_host>
+credentials.port = <port_no>
+
+# use the database apppender to log errors
+database.use_database_appender = false
+
+# indexes 
+
+# auto load these tables (space separated)
+# table_index.load_tables = cschem1_test.nci_open.smiles arena.molecules.smiles eln_archive.eln_lta_structures.smiles
+
+# fill cache from these indexes
+# table_index.cache.cschem1_test.nci_open.smiles = true
+# table_index.cache.arena.molecules.smiles = true
+# table_index.cache.eln_structure.eln_lta_structures.smiles = false
+
