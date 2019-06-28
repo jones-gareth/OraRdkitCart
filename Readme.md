@@ -28,5 +28,5 @@ Please see the license at `http://www.apache.org/licenses/LICENSE-2.0.txt`
 > See the License for the specific language governing permissions and
 > limitations under the License.
 
-Please see the [Documentation](docs/index.html) for more
+Please see the [Documentation](https://jones-gareth.github.io/OraRdKitCart/index.html) for more
 information.
