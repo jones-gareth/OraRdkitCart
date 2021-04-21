@@ -6,11 +6,21 @@ Prerequisites
 Summary
 *******
 
+* Code base
 * Oracle 12C or 18C
 * Java 11 JDK
-* RRDKit Java library
+* RDKit Java library
 * Maven 3.3.9 or later
 * Correct network configuration
+
+Code Base
+*********
+
+Pull the code base from github:
+
+::
+
+    git clone https://github.com/jones-gareth/OraRdkitCart.git
 
 Oracle 12C or 18C
 *****************

@@ -1054,8 +1054,10 @@ public class TableIndex extends IndexBase {
             while (resultSet.next()) {
                 ROWID rowid = resultSet.getROWID(1);
                 String id = resultSet.getString(2);
+                logger.debug("Got rowid "+rowid+" id "+id);
                 FingerprintedSmiles fingerprintedSmiles = lookup.get(new RowKey(rowid));
                 if (fingerprintedSmiles != null) {
+                    logger.debug("Fingerprinted smiles is "+fingerprintedSmiles.getSmiles());
                     updateStatement.setString(1, fingerprintedSmiles.getSmiles());
                     updateStatement.setString(2, fingerprintedSmiles.getStringFingerprint());
                     updateStatement.setString(3, id);
@@ -1063,6 +1065,10 @@ public class TableIndex extends IndexBase {
                     count++;
                     if (count % 10000 == 0)
                         logger.info("extracted " + count + " smiles");
+                    logger.debug("Updated!");
+                }
+                else {
+                    logger.debug("fingerprinted smiles is not present!");
                 }
             }
 
