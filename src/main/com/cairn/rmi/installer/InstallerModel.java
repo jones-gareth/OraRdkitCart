@@ -43,7 +43,7 @@ public class InstallerModel implements LoadNCI.LoadNCIListener {
             cartridgePasswd = "", rmiHost, userTablespace = "", tmpTablespace = "",
             registryOracleHome;
     private final List<InstallerMessageListener> messageListeners = new ArrayList<>();
-    private static final String[] ORACLE_VERSIONS = {"12", "18"};
+    private static final String[] ORACLE_VERSIONS = {"12", "18", "19"};
     private final Date installDate = new Date();
     private volatile int cacheSize;
     private volatile boolean useCache = false,
