@@ -1,3 +1,4 @@
+export RDBASE=ThisCanBeAnything
 dir=$(dirname $(readlink -f $0))
 cd $dir
 ./stopServer.sh

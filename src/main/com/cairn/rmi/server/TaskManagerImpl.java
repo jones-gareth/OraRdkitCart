@@ -37,8 +37,8 @@ import com.cairn.common.MoleculeCache;
  * @author Gareth Jones
  */
 public class TaskManagerImpl extends UnicastRemoteObject implements TaskManagerInterface {
-// code for dymanic stub:
-//public class TaskManagerImpl implements TaskManagerInterface {
+    private static Registry registry;
+    private static TaskManagerImpl taskManager;
 
     // application version number
     private static final String VERSION = "0.9.6.a";
@@ -346,12 +346,12 @@ public class TaskManagerImpl extends UnicastRemoteObject implements TaskManagerI
                 int rmiPort = TaskManagerInterface.PORT;
                 RMISocketFactory.setSocketFactory(new FixedPortRMISocketFactory());
                 LocateRegistry.createRegistry(rmiPort);
-                Registry registry = LocateRegistry.getRegistry(rmiPort);
+                registry = LocateRegistry.getRegistry(rmiPort);
 
                 // implement task queuing
                 BatchSystem.start(nThreads);
 
-                TaskManagerImpl taskManager = new TaskManagerImpl();
+                taskManager = new TaskManagerImpl();
                 // code for dynamic stubs
                 //TaskManagerInterface stub = (TaskManagerInterface)  UnicastRemoteObject.exportObject(taskManager, rmiPort);
                 //registry.bind(name, stub);
